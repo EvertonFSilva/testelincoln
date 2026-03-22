@@ -1,11 +1,10 @@
 services:
   - type: web
     name: cl-vidracaria-sistema
-    env: php
+    runtime: php
     plan: free
     region: ohio
     buildCommand: composer install
-    startCommand: apachectl start # O Render configura o Apache automaticamente para PHP
     envVars:
       - key: PHP_VERSION
         value: 8.2
