@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $html = "
     <style>
-        /* Margem 0 na página remove as bordas brancas. O padding vai no body */
         @page { margin: 0px; }
         body {
             font-family: 'Helvetica', sans-serif;
@@ -52,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .logo-image { width: 220px; }
         .company-info { text-align: right; font-size: 13px; line-height: 1.6; }
         .company-name { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
-
         .document-title {
             text-align: center;
             font-size: 28px;
@@ -61,17 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-        /* Garantir o sublinhado no DomPDF */
         .document-title span {
             border-bottom: 2px solid #000;
             padding-bottom: 5px;
         }
-
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-        }
-        
+        table { width: 100%; border-collapse: collapse; }
         th { 
             background-color: #d1cfc5; 
             color: #000;
@@ -81,14 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 18px;
             text-transform: uppercase;
         }
-
         .total-row td {
             font-weight: bold;
             border: 2px solid #000;
             padding: 15px;
             font-size: 20px;
         }
-
         .footer-fixed {
             position: fixed;
             bottom: 30px;
@@ -96,20 +86,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             right: 0;
             text-align: center;
         }
-
         .representative {
             font-size: 18px;
             font-weight: bold;
             text-transform: uppercase;
             margin-bottom: 5px;
         }
-
         .date-label {
             font-size: 18px;
             font-weight: bold;
         }
     </style>
-
     <table class='header-container'>
         <tr>
             <td><img src='$logoBase64' class='logo-image'></td>
@@ -120,9 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </td>
         </tr>
     </table>
-
     <div class='document-title'><span>ORÇAMENTO</span></div>
-
     <table>
         <thead>
             <tr>
@@ -140,7 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </tr>
         </tbody>
     </table>
-
     <div class='footer-fixed'>
         <div class='representative'>LINCOLN FERNANDES SANTOS</div>
         <div class='date-label'>$formattedDate</div>
@@ -149,12 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $pdfOptions = new Options();
     $pdfOptions->set('isRemoteEnabled', true);
-
     $dompdf = new Dompdf($pdfOptions);
     $dompdf->loadHtml($html);
     $dompdf->setPaper("A4");
     $dompdf->render();
-
     $dompdf->stream("Orcamento_CL_Vidracaria_$fileNameDate.pdf", ["Attachment" => true]);
     exit;
 }
@@ -164,53 +146,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador CL Vidraçaria</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #eeede9; font-family: 'Segoe UI', sans-serif; }
-        .navbar { background-color: #000; padding: 1.5rem; }
+        body { background-color: #eeede9; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        .navbar { background-color: #000; padding: 1.2rem; }
+        .navbar-brand { font-size: 1.1rem; white-space: normal; text-align: center; }
+        
         .app-card { 
-            max-width: 1000px; margin: 50px auto; background: transparent; 
+            max-width: 1000px; margin: 20px auto; padding: 10px;
         }
+        
         .table { border: 2px solid #000; background-color: #eeede9; }
         .table thead th { 
-            background-color: #d1cfc5; border-bottom: 2px solid #000; border: 2px solid #000;
-            color: #000; font-weight: bold; padding: 15px; text-transform: uppercase;
+            background-color: #d1cfc5; border: 2px solid #000;
+            color: #000; font-weight: bold; padding: 12px; text-transform: uppercase;
         }
-        .table tbody td {
-            border: 2px solid #000; padding: 0; vertical-align: middle;
-        }
+        .table tbody td { border: 2px solid #000; padding: 0; vertical-align: middle; }
+        
         .input-cell {
-            width: 100%; border: none; background: transparent; padding: 15px; font-size: 16px; font-weight: 500;
-            transition: background-color 0.2s;
+            width: 100%; border: none; background: transparent; padding: 12px; font-size: 16px; font-weight: 500;
         }
-        /* Fundo branco ao clicar no campo */
         .input-cell:focus { outline: none; background-color: #ffffff; }
         
-        .price-wrapper {
-            display: flex; align-items: center; width: 100%; height: 100%;
-        }
-        .currency-symbol {
-            padding-left: 15px; font-weight: bold; color: #000;
-        }
+        .price-wrapper { display: flex; align-items: center; width: 100%; }
+        .currency-symbol { padding-left: 12px; font-weight: bold; }
+        
         .btn-new-item { 
             background-color: #000; color: #fff; border: none; 
-            padding: 12px 30px; font-weight: bold; border-radius: 4px;
+            padding: 12px 25px; font-weight: bold; width: 100%; margin-bottom: 20px;
         }
         .btn-remove { 
             background-color: #dc3545; color: white; border: none; 
-            padding: 15px; font-weight: bold; width: 100%; height: 100%; min-height: 56px;
+            padding: 12px; font-weight: bold; width: 100%;
         }
-        .btn-remove:hover { background-color: #b02a37; }
         .btn-submit { 
-            background-color: #000; color: white; padding: 20px; 
-            font-weight: bold; font-size: 1.3rem; border-radius: 4px; width: 100%; border: none;
+            background-color: #000; color: white; padding: 15px; 
+            font-weight: bold; font-size: 1.1rem; width: 100%; border: none;
         }
+        
         .total-display { 
-            background: #d1cfc5; padding: 30px; border-radius: 4px; 
-            text-align: right; border: 2px solid #000;
+            background: #d1cfc5; padding: 20px; text-align: right; border: 2px solid #000;
         }
-        .total-text { font-size: 2.5rem; font-weight: 900; color: #000; }
+        .total-text { font-size: 2rem; font-weight: 900; color: #000; }
+
+        /* AJUSTES PARA CELULAR */
+        @media (max-width: 768px) {
+            .app-card { margin: 10px auto; }
+            
+            /* Transforma a tabela em lista */
+            .table thead { display: none; } /* Esconde o cabeçalho na lista */
+            .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+            
+            .table tr { margin-bottom: 15px; border: 2px solid #000; }
+            .table td { border: none; border-bottom: 1px solid #ccc; position: relative; }
+            .table td:last-child { border-bottom: none; }
+
+            /* Identificadores visuais para os campos no mobile */
+            .table td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                font-weight: bold;
+                text-transform: uppercase;
+                padding: 5px 12px 0;
+                color: #666;
+            }
+
+            .total-text { font-size: 1.6rem; }
+            .btn-new-item { padding: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -221,32 +227,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </nav>
 
-<div class="container mb-5">
+<div class="container">
     <div class="app-card">
         <form method="POST">
             <table class="table align-middle mb-4">
                 <thead>
                     <tr>
-                        <th>Descrição do Serviço / Produto</th>
-                        <th style="width: 250px;">Valor Unitário</th>
-                        <th id="actionHeader" style="width: 120px; text-align: center; display: none;">Ação</th>
+                        <th>Descrição</th>
+                        <th style="width: 200px;">Valor</th>
+                        <th id="actionHeader" style="width: 100px; text-align: center; display: none;">Ação</th>
                     </tr>
                 </thead>
                 <tbody id="itemList">
-                </tbody>
+                    </tbody>
             </table>
 
-            <button type="button" class="btn btn-new-item mb-5 shadow-sm" onclick="addItem()">
-                + NOVO ITEM
+            <button type="button" class="btn btn-new-item shadow-sm" onclick="addItem()">
+                + ADICIONAR ITEM
             </button>
 
-            <div class="total-display mb-5 shadow-sm">
-                <div class="small fw-bold text-uppercase">Valor Total</div>
+            <div class="total-display mb-4">
+                <div class="small fw-bold text-uppercase">Total do Orçamento</div>
                 <div class="total-text">R$ <span id="grandTotal">0,00</span></div>
             </div>
 
-            <button type="submit" class="btn btn-submit shadow">
-                GERAR ORÇAMENTO
+            <button type="submit" class="btn btn-submit shadow mb-5">
+                GERAR PDF AGORA
             </button>
         </form>
     </div>
@@ -257,18 +263,19 @@ function addItem() {
     const list = document.getElementById('itemList');
     const row = document.createElement('tr');
     
+    // Adicionei "data-label" para aparecer o nome do campo no mobile
     row.innerHTML = `
-        <td>
-            <input type="text" name="description[]" class="input-cell" placeholder="Digite a descrição..." required>
+        <td data-label="Descrição do Serviço">
+            <input type="text" name="description[]" class="input-cell" placeholder="Ex: Janela de Vidro..." required>
         </td>
-        <td>
+        <td data-label="Valor (R$)">
             <div class="price-wrapper">
                 <span class="currency-symbol">R$</span>
                 <input type="text" name="price[]" class="input-cell text-end" placeholder="0,00" oninput="maskPrice(this); calculate();" required>
             </div>
         </td>
         <td class="p-0 action-cell" style="display: none;">
-            <button type="button" class="btn-remove" onclick="removeRow(this)">REMOVER</button>
+            <button type="button" class="btn-remove" onclick="removeRow(this)">REMOVER ITEM</button>
         </td>
     `;
     
@@ -287,10 +294,8 @@ function toggleRemoveButtons() {
     const actionHeader = document.getElementById('actionHeader');
     const shouldShow = rows.length > 1;
 
-    // Mostra/oculta o cabeçalho de Ação
     actionHeader.style.display = shouldShow ? 'table-cell' : 'none';
 
-    // Mostra/oculta as colunas de botão de todas as linhas
     rows.forEach(row => {
         const cell = row.querySelector('.action-cell');
         if (cell) cell.style.display = shouldShow ? 'table-cell' : 'none';
@@ -313,6 +318,7 @@ function calculate() {
     document.getElementById('grandTotal').innerText = sum.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 }
 
+// Inicia com um item
 addItem();
 </script>
 </body>
